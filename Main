@@ -1,0 +1,156 @@
+MENU = {
+    "espresso": {
+        "ingredients": {
+            "water": 50,
+            "coffee": 18,
+        },
+        "cost": 1.5,
+    },
+    "latte": {
+        "ingredients": {
+            "water": 200,
+            "milk": 150,
+            "coffee": 24,
+        },
+        "cost": 2.5,
+    },
+    "cappuccino": {
+        "ingredients": {
+            "water": 250,
+            "milk": 100,
+            "coffee": 24,
+        },
+        "cost": 3.0,
+    }
+}
+
+resources = {
+    "water": 300,
+    "milk": 200,
+    "coffee": 100,
+    "money": 0,
+}
+
+needed_water = []
+needed_milk = []
+needed_coffee = []
+
+#Check which/how much of the ingredients are needed in the drink:
+
+def needed_ingredients(water, milk, coffee):
+
+    needed_water.append((MENU[user_choice]["ingredients"]["water"]))
+    needed_milk.append((MENU[user_choice]["ingredients"]["milk"]))
+    needed_coffee.append(((MENU)[user_choice]["ingredients"]["coffee"]))
+
+#Remove the needed amount of ingredients from the resources:
+
+def remove_needed_ingredients():
+
+    resources["water"] - int(needed_water[0])
+    resources["milk"] - int(needed_milk[0])
+    resources["coffee"] - int(needed_coffee[0])
+
+#Inform if running out of resources for the desired beverage:
+
+def check_resources():
+
+    if resources["water"] < int(needed_water[0]):
+        print("Not enought water left")
+        return 0
+    if resources["milk"] < int(needed_milk[0]):
+        print("Not enough milk left")
+        return 0
+    if resources["coffee"] < int(needed_coffee[0]):
+        print("Not enough coffee left")
+        return 0
+    else:
+        return f"Enough resources! :)"
+
+#Add resources if running out of them
+
+def add_resources():
+
+    if check_resources != None:
+        if resources["water"] < 300:
+            while resources["water"] < 300:
+                resources["water"] += 1
+            print("Filled the water container")
+        if resources["milk"] < 200:
+            while resources["milk"] < 200:
+                resources["milk"] += 1
+            print("Filled the milk container")
+        if resources["coffee"] < 100:
+            while resources["coffee"] < 100:
+                resources["coffee"] += 1
+            print("Filled the coffee container")
+
+    return f"Enough resources! :)"
+
+process_on = True
+while process_on == True:
+
+    user_choice = input("What would you like to have? (espresso/latte/cappuccino: ")
+    if user_choice == "report":
+        print(resources)
+    elif user_choice == "off":
+        process_on == False
+
+    needed_ingredients(needed_water, needed_milk, needed_coffee)
+    print(check_resources())
+    if check_resources() == 0:
+        print(add_resources())
+    price = MENU[user_choice]["cost"]
+    quarter = 0.25
+    dime = 0.10
+    nickle = 0.05
+    penny = 0.01
+    inserted_money = 0
+    applying_money = True
+
+    print(f"{user_choice.title()} would cost {MENU[user_choice]['cost']} $.")
+
+    while inserted_money < price:
+
+        print("Insert coins. We accept quarters/dimes/nickles/pennies")
+        coin = input("What will you input? quarter/dime/nickle/penny: ")
+        amount = float(input(f"How many {coin}s? "))
+
+        if coin == "quarter":
+            inserted_money += quarter * amount
+            print(f"{inserted_money}$ inserted. ")
+        elif coin == "dime":
+            inserted_money += dime * amount
+            print(f"{inserted_money}$ inserted. ")
+        elif coin == "nickle":
+            inserted_money += nickle * amount
+            print(f"{inserted_money}$ inserted. ")
+        elif coin == "penny":
+            inserted_money += penny * amount
+            print(f"{inserted_money}$ inserted.")
+        status = input("Add more? 'y or 'n' ")
+        if status == "n":
+            if inserted_money < price:
+                print("Not enough money. Money funded.")
+                inserted_money = inserted_money - inserted_money
+                applying_money == False
+        
+    print(f"Thank you! {user_choice} incoming!")
+    inserted_money += resources["money"]
+
+    if user_choice == "espresso":
+        resources["money"] += 1.5
+    elif user_choice == "latte":
+        resources["money"] += 2.0
+    elif user_choice == "cappuccino":
+        resources["money"] += 3.0
+    remove_needed_ingredients()
+
+    print(f"Here is your {user_choice}. Enjoy!")
+
+
+else:
+    if input("Would you like to have a beverage? 'y' or 'n': ") == "y":
+        process_on == True
+
+
