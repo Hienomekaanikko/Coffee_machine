@@ -145,12 +145,7 @@ def run_the_machine():
 
 #Update the money resources
 
-        if user_choice == "espresso":
-            resources["money"] += 1.5
-        elif user_choice == "latte":
-            resources["money"] += 2.0
-        elif user_choice == "cappuccino":
-            resources["money"] += 3.0
+        resources["money"] += MENU[user_choice]["cost"]
 
 #Update the current resources
 
