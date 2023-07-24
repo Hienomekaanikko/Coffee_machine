@@ -155,7 +155,10 @@ def run_the_machine():
 
     print(f"Here is your {user_choice}. Enjoy!")
 
-while input("Would you like to order a drink? 'yes' or 'no' ") != "off":
+while input("Would you like to order a drink? 'yes' or 'off'. ") != "off":
     run_the_machine()
 else:
-    input("Machine turned off.")
+    print("Machine turned off.")
+    if input("Restart by typing 'start': ") == "start":
+        print("brrrrrrrrr")
+        run_the_machine()
