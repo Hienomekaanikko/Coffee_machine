@@ -49,9 +49,9 @@ def needed_ingredients(water, milk, coffee):
 
 def remove_needed_ingredients():
 
-    resources["water"] - int(needed_water[0])
-    resources["milk"] - int(needed_milk[0])
-    resources["coffee"] - int(needed_coffee[0])
+    resources["water"] -= int(needed_water[0])
+    resources["milk"] -= int(needed_milk[0])
+    resources["coffee"] -= int(needed_coffee[0])
 
 #Inform if running out of resources for the desired beverage:
 
@@ -149,7 +149,7 @@ def run_the_machine():
 
 #Update the current resources
 
-    remove_needed_ingredients()
+        remove_needed_ingredients()
 
 #Give the beverage
 
