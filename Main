@@ -25,9 +25,9 @@ MENU = {
 }
 
 resources = {
-    "water": 300,
-    "milk": 200,
-    "coffee": 100,
+    "water": 1000,
+    "milk": 1000,
+    "coffee": 1000,
     "money": 0,
 }
 
@@ -104,10 +104,12 @@ def run_the_machine():
 
     global user_choice
     user_choice = input("What would you like to have? (espresso/latte/cappuccino: ")
+    if user_choice == "report":
+        print(resources)
+        run_the_machine()
 
     needed_ingredients(needed_water, needed_milk, needed_coffee)
     print(check_resources())
-    print(needed_milk)
     if check_resources() == 0:
         print(add_resources())
     price = MENU[user_choice]["cost"]
@@ -121,15 +123,24 @@ def run_the_machine():
 
     print("Insert coins. We accept quarters/dimes/nickles/pennies")
 
-    while inserted_money != price:
+    while inserted_money < price:
 
-        coin = input("What will you input? quarter/dime/nickle/penny: ")
+        refund = 0
+        coin = input("What will you input? quarter/dime/nickle/penny/none: ")
         amount = float(input(f"How many {coin}s? "))
         inserted_money += receive_coins(coin, inserted_money, quarter, dime, nickle, penny, amount)
+        if coin == "none" and inserted_money < price:
+            print("Unfortunately you didn't have enough money. Money refunded.")
+            inserted_money -= inserted_money
+            run_the_machine()
         print(inserted_money)
 
     else:
         print(f"Thank you! {user_choice} incoming!")
+        if inserted_money > price:
+            refund = inserted_money - price
+            print(f"You inserted {refund}$ too much. Here, you can have it back! :).")
+            refund -= refund
         inserted_money += resources["money"]
 
 #Update the money resources
@@ -143,7 +154,7 @@ def run_the_machine():
 
 #Update the current resources
 
-        remove_needed_ingredients()
+    remove_needed_ingredients()
 
 #Give the beverage
 
