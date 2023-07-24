@@ -38,9 +38,11 @@ needed_coffee = []
 #Check which/how much of the ingredients are needed in the drink:
 
 def needed_ingredients(water, milk, coffee):
-
     needed_water.append((MENU[user_choice]["ingredients"]["water"]))
-    needed_milk.append((MENU[user_choice]["ingredients"]["milk"]))
+    if  "milk" in MENU[user_choice]["ingredients"]:
+        needed_milk.append((MENU[user_choice]["ingredients"]["milk"]))
+    else:
+        needed_milk.append(0)
     needed_coffee.append(((MENU)[user_choice]["ingredients"]["coffee"]))
 
 #Remove the needed amount of ingredients from the resources:
@@ -87,17 +89,25 @@ def add_resources():
 
     return f"Enough resources! :)"
 
-process_on = True
-while process_on == True:
+def receive_coins(coin, inserted_money, quarter, dime, nickle, penny, amount):
 
+    if coin == "quarter":
+        return quarter * amount
+    elif coin == "dime":
+        return dime * amount
+    elif coin == "nickle":
+        return nickle * amount
+    elif coin == "penny":
+        return penny * amount
+
+def run_the_machine():
+
+    global user_choice
     user_choice = input("What would you like to have? (espresso/latte/cappuccino: ")
-    if user_choice == "report":
-        print(resources)
-    elif user_choice == "off":
-        process_on == False
 
     needed_ingredients(needed_water, needed_milk, needed_coffee)
     print(check_resources())
+    print(needed_milk)
     if check_resources() == 0:
         print(add_resources())
     price = MENU[user_choice]["cost"]
@@ -106,51 +116,40 @@ while process_on == True:
     nickle = 0.05
     penny = 0.01
     inserted_money = 0
-    applying_money = True
 
     print(f"{user_choice.title()} would cost {MENU[user_choice]['cost']} $.")
 
-    while inserted_money < price:
+    print("Insert coins. We accept quarters/dimes/nickles/pennies")
 
-        print("Insert coins. We accept quarters/dimes/nickles/pennies")
+    while inserted_money != price:
+
         coin = input("What will you input? quarter/dime/nickle/penny: ")
         amount = float(input(f"How many {coin}s? "))
+        inserted_money += receive_coins(coin, inserted_money, quarter, dime, nickle, penny, amount)
+        print(inserted_money)
 
-        if coin == "quarter":
-            inserted_money += quarter * amount
-            print(f"{inserted_money}$ inserted. ")
-        elif coin == "dime":
-            inserted_money += dime * amount
-            print(f"{inserted_money}$ inserted. ")
-        elif coin == "nickle":
-            inserted_money += nickle * amount
-            print(f"{inserted_money}$ inserted. ")
-        elif coin == "penny":
-            inserted_money += penny * amount
-            print(f"{inserted_money}$ inserted.")
-        status = input("Add more? 'y or 'n' ")
-        if status == "n":
-            if inserted_money < price:
-                print("Not enough money. Money funded.")
-                inserted_money = inserted_money - inserted_money
-                applying_money == False
-        
-    print(f"Thank you! {user_choice} incoming!")
-    inserted_money += resources["money"]
+    else:
+        print(f"Thank you! {user_choice} incoming!")
+        inserted_money += resources["money"]
 
-    if user_choice == "espresso":
-        resources["money"] += 1.5
-    elif user_choice == "latte":
-        resources["money"] += 2.0
-    elif user_choice == "cappuccino":
-        resources["money"] += 3.0
-    remove_needed_ingredients()
+#Update the money resources
+
+        if user_choice == "espresso":
+            resources["money"] += 1.5
+        elif user_choice == "latte":
+            resources["money"] += 2.0
+        elif user_choice == "cappuccino":
+            resources["money"] += 3.0
+
+#Update the current resources
+
+        remove_needed_ingredients()
+
+#Give the beverage
 
     print(f"Here is your {user_choice}. Enjoy!")
 
-
+while input("Would you like to order a drink? 'yes' or 'no' ") != "off":
+    run_the_machine()
 else:
-    if input("Would you like to have a beverage? 'y' or 'n': ") == "y":
-        process_on == True
-
-
+    input("Machine turned off.")
